@@ -99,7 +99,7 @@ $("btnSched").onclick=()=>show("sched");$("btnLive").onclick=()=>show("line");$(
 // ── 포스트시즌 (2026-10-15 기준 KBO 발표 일정) ──
 // 형식: [날짜, 시간, 원정, 홈, 구장, null, null, null, 단계, 차전, 필요시(시리즈 결과에 따라 열리지 않을 수 있음)]
 // "준PO승자"·"PO승자"는 앞 시리즈가 끝나기 전까지 상대가 정해지지 않은 자리입니다. 확정되면 팀 이름으로 바꾸면 됩니다.
-const PH={"준PO승자":["KIA","LG"],"PO승자":["삼성","KIA","LG"]},isPH=k=>!!PH[k];
+const PH={"PO승자":["삼성","KIA"]},isPH=k=>!!PH[k];
 const STG={WC:"와일드카드 결정전",준PO:"준플레이오프",PO:"플레이오프",KS:"한국시리즈"};
 const PARK={두산:"잠실",LG:"잠실",KIA:"광주",삼성:"대구",SSG:"문학",롯데:"사직",한화:"대전",NC:"창원",KT:"수원",키움:"고척"};
 const PSG=[
@@ -110,11 +110,11 @@ const PSG=[
 ["2026-10-20","18:30","KIA","LG","잠실",null,null,null,"준PO",3,false],
 ["2026-10-21","18:30","KIA","LG","잠실",null,null,null,"준PO",4,true],
 ["2026-10-23","18:30","LG","KIA","광주",null,null,null,"준PO",5,true],
-["2026-10-25","14:00","준PO승자","삼성","대구",null,null,null,"PO",1,false],
-["2026-10-26","18:30","준PO승자","삼성","대구",null,null,null,"PO",2,false],
-["2026-10-28","18:30","삼성","준PO승자","승자 홈",null,null,null,"PO",3,false],
-["2026-10-29","18:30","삼성","준PO승자","승자 홈",null,null,null,"PO",4,true],
-["2026-10-31","14:00","준PO승자","삼성","대구",null,null,null,"PO",5,true],
+["2026-10-25","14:00","KIA","삼성","대구",null,null,null,"PO",1,false],
+["2026-10-26","18:30","KIA","삼성","대구",null,null,null,"PO",2,false],
+["2026-10-28","18:30","삼성","KIA","광주",null,null,null,"PO",3,false],
+["2026-10-29","18:30","삼성","KIA","광주",null,null,null,"PO",4,true],
+["2026-10-31","14:00","KIA","삼성","대구",null,null,null,"PO",5,true],
 ["2026-11-02","18:30","PO승자","KT","수원",null,null,null,"KS",1,false],
 ["2026-11-03","18:30","PO승자","KT","수원",null,null,null,"KS",2,false],
 ["2026-11-05","18:30","KT","PO승자","승자 홈",null,null,null,"KS",3,false],
@@ -134,7 +134,7 @@ const psNote=g=>{if(!g[8])return"";if(!(g[2]===sel||g[3]===sel||inPh(g[2],sel)||
  if(g[10]&&!via(g))t.push('시리즈가 먼저 끝나면 열리지 않는 경기예요.');
  if(g[4]==="승자 홈"&&!isHome(g))t.push('구장은 상대 시리즈 승자의 홈구장이라 결과가 나온 뒤 정해져요.');
  return t.length?'<p class="note">'+t.join(' ')+'</p>':""};
-const PSINFO={KT:"정규시즌 1위 · 한국시리즈 직행",삼성:"정규시즌 2위 · 플레이오프 직행",KIA:"정규시즌 3위 · 준플레이오프에서 LG와 대결",LG:"정규시즌 4위 · 와일드카드 결정전 1차전 승리(4:1) → 준플레이오프 진출",두산:"정규시즌 5위 · 와일드카드 결정전에서 LG에 져 탈락"};
+const PSINFO={KT:"정규시즌 1위 · 한국시리즈 직행",삼성:"정규시즌 2위 · 플레이오프 직행",KIA:"정규시즌 3위 · 준플레이오프에서 LG를 3승 0패로 꺾고 플레이오프 진출 → 삼성과 대결",LG:"정규시즌 4위 · 와일드카드 결정전 승리(4:1) → 준플레이오프에서 KIA에 0승 3패로 탈락",두산:"정규시즌 5위 · 와일드카드 결정전에서 LG에 져 탈락"};
 const NEED={WC:1,"준PO":3,PO:3,KS:4};
 function seriesHtml(){let h='<div class="ser">';
  ["WC","준PO","PO","KS"].forEach(st=>{const gs=PSG.filter(g=>g[8]===st),ts=[];
@@ -376,6 +376,11 @@ R["2026-10-14|두산|LG"]=[1,4];RN["2026-10-15|두산|LG"]="취소(시리즈 종
 // 준플레이오프 1차전: 10/17 광주 KIA 5:1 LG
 R["2026-10-17|LG|KIA"]=[1,5];
 R["2026-10-18|LG|KIA"]=[3,6];
+// 준플레이오프 3차전: 10/20 잠실 KIA 13:1 LG (KIA 3승 0패로 시리즈 종료, 플레이오프 진출)
+R["2026-10-20|KIA|LG"]=[13,1];
+RN["2026-10-21|KIA|LG"]="취소(시리즈 종료): KIA가 3승을 먼저 올려 열리지 않았습니다.";RN["2026-10-23|LG|KIA"]="취소(시리즈 종료): KIA가 3승을 먼저 올려 열리지 않았습니다.";
+// 10/20 잠실 준PO 3차전 KIA 13:1 LG → KIA 3승 0패로 플레이오프 진출 (4·5차전 미개최)
+R["2026-10-20|KIA|LG"]=[13,1];RN["2026-10-21|KIA|LG"]="취소(시리즈 종료): KIA가 3승을 먼저 거둬 열리지 않았습니다.";RN["2026-10-23|LG|KIA"]="취소(시리즈 종료): KIA가 3승을 먼저 거둬 열리지 않았습니다.";
 // ── 우천 취소 · 우천 콜드 ──
 // 우천 취소: [날짜, 원정, 홈, (구장: 평소 홈구장과 다를 때만)] — 시즌 일정표와 경기 결과에서 빠진 경기를 대조하고 KBO 발표·경기 기사로 확인한 경기입니다. 폭염 취소(8/1~8/9)는 넣지 않았습니다.
 const RXL=[["04-09","KT","롯데"],["04-09","LG","NC"],["04-09","삼성","KIA"],["04-09","키움","두산"],["04-09","한화","SSG"],
@@ -460,7 +465,7 @@ function bracket(){
   const parts=d.ts.slice();if(nxt[st]){const src=sd[nxt[st]];if(src&&src.win&&!parts.includes(src.win))parts.push(src.win)}
   let out="";if(d.win){const lo=parts.find(t=>t!==d.win),NS={WC:"준플레이오프",준PO:"플레이오프",PO:"한국시리즈"},RK={WC:"5위",준PO:"4위",PO:"3위"},cl=t=>' class="out'+(t===sel?' me':'')+'"';
    if(st==="KS"){if(lo===sel)out='<p'+cl(lo)+'><b>'+nm(lo)+'</b> KBO 준우승을 하였습니다.</p>';else if(d.win===sel)out='<p'+cl(d.win)+'><b>'+nm(d.win)+'</b> KBO 우승을 하였습니다.</p>'}
-   else if(lo&&lo===sel)out='<p'+cl(lo)+'><b>'+nm(lo)+'</b> '+NS[st]+'에 진출하지 못하였습니다.<br>KBO '+RK[st]+'를 하였습니다.</p>'}
+   else if(lo&&lo===sel)out='<p'+cl(lo)+'><b>'+nm(lo)+'</b> '+NS[st]+'에 진출하지 못하였습니다.<br>KBO '+RK[st]+'를 하였습니다.</p>';else if(d.win===sel)out='<p'+cl(d.win)+'><b>'+nm(d.win)+'</b> '+NS[st]+'에 진출하였습니다.</p>'}
   return '<div class="bc"><h3>'+STG[st]+'<em>'+st2+'</em></h3>'+teams+'<ul>'+d.gs.map(rn).join('')+'</ul>'+out+'</div>'};
  $("view").innerHTML='<div class="panel"><h2>'+nm(sel)+' 2026 포스트시즌 일정표</h2>'+stabs()+'<div class="scroll"><div class="brk">'+["WC","준PO","PO","KS"].map(card).join('<div class="ar">▶</div>')+'</div></div><div id="detail" class="dtl" style="display:none"></div><p class="note">· 경기를 누르면 경기 정보가 나옵니다.<br>· 정규시즌 순위: 1위 KT(한국시리즈 직행) · 2위 삼성(플레이오프 직행) · 3위 KIA · 4위 LG · 5위 두산.<br>· *는 시리즈 결과에 따라 열리지 않을 수 있는 경기입니다. 우천 시 경기는 하루씩 밀립니다. 일정은 10월 15일 기준 KBO 발표입니다.</p>'+LINKS+'</div>'}
 function rank(){
