@@ -150,8 +150,13 @@ const psBanner=()=>'<p class="psb"><span class="ps">포스트시즌</span> '+(PS
 const NV='<a class="nv" href="https://m.sports.naver.com/kbaseball/schedule/index" target="_blank" rel="noopener">네이버 스포츠에서 라인업 보기 ▸</a>';
 const NVS="https://m.sports.naver.com/kbaseball/schedule/index";
 const CODE={두산:"OB",LG:"LG",KIA:"HT",삼성:"SS",SSG:"SK",롯데:"LT",한화:"HH",NC:"NC",KT:"KT",키움:"WO"};
-function nvBtn(g){const u=(g[7]||g[8])?NVS:"https://m.sports.naver.com/game/"+g[0].replace(/-/g,"")+CODE[g[2]]+CODE[g[3]]+"0"+g[0].slice(0,4)+"/lineup";
- return '<a class="nv" href="'+u+'" target="_blank" rel="noopener">네이버 스포츠에서 이 경기 라인업 보기 ▸</a>'}
+// 네이버 경기 주소: 정규시즌 YYYYMMDD+원정+홈+0+연도, 포스트시즌은 앞 4자리(연도)가 단계 코드로 바뀜
+// (준PO=3333은 실제 주소로 확인, 와일드카드 5555·PO 4444·KS 7777은 같은 규칙으로 추정)
+const SC={WC:"5555","준PO":"3333",PO:"4444",KS:"7777"};
+function nvBtn(g){const ok=!g[7]&&CODE[g[2]]&&CODE[g[3]];
+ const id=ok?(g[8]?SC[g[8]]:g[0].slice(0,4))+g[0].slice(5,7)+g[0].slice(8)+CODE[g[2]]+CODE[g[3]]+"0"+g[0].slice(0,4):"";
+ const u=ok?"https://m.sports.naver.com/game/"+id+"/lineup":NVS+"?date="+g[0];
+ return '<a class="nv" href="'+u+'" target="_blank" rel="noopener">네이버 스포츠에서 '+(ok?'이 경기':md(g[0])+' 경기')+' 라인업 보기 ▸</a>'}
 const LINKS='<p class="note">실시간 문자중계·라인업(경기 약 1시간 전 공개)은 <a class="nv" href="https://m.sports.naver.com/kbaseball/schedule/index" target="_blank" rel="noopener">네이버 스포츠</a> · <a href="https://sports.daum.net/schedule/kbo" target="_blank" rel="noopener">다음 스포츠</a>, <a href="https://www.koreabaseball.com" target="_blank" rel="noopener">KBO 공식 사이트</a>에서 확인하세요.</p>';
 let cm=null;
 function sched(mo){
