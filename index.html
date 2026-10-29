@@ -50,6 +50,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:linear-grad
 .ps{display:inline-block;background:#e4572e;color:#fff;font-weight:800;border-radius:4px;padding:0 5px;font-size:11px;line-height:1.5}.day i{font-style:normal;font-size:10px;opacity:.85}.day .ps{margin-left:4px}
 .day.psd{border-color:#e4572e;background:#e4572e26}.psb{margin:0 0 10px;font-weight:700}.ser{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:0 0 12px}.sc{border:1px solid #fff4;border-radius:10px;padding:8px}.sc h3{margin:0 0 6px;font-size:15px}.sc h3 em{float:right;font-style:normal;font-size:12px;opacity:.8}.sr{display:flex;justify-content:space-between;gap:6px;padding:6px 8px;border:1px solid transparent;border-radius:8px;font-size:14px}.sr.dim{opacity:.6}.brk{display:flex;align-items:flex-start;gap:6px;min-width:max-content}.bc{width:230px;border:1px solid #fff4;border-radius:10px;padding:8px}.bc h3{margin:0 0 6px;font-size:15px}.bc h3 em{float:right;font-style:normal;font-size:12px;opacity:.8}.bt{display:flex;justify-content:space-between;padding:6px 8px;border:1px solid transparent;border-radius:8px;font-size:14px}.bt.dim{opacity:.6}.bt.win span{color:#ffd54a}.bc ul{list-style:none;margin:8px 0 0;padding:0;font-size:12px}button.pg{all:unset;display:block;width:100%;box-sizing:border-box;cursor:pointer;color:#fff;font-size:12px;line-height:1.45}button.pg:hover{background:#ffd54a33}button.pg u{display:block;font-size:11px;opacity:.75}.bc li{padding:5px 0;border-top:1px solid #fff2}.bc li i{font-style:normal;font-weight:800;color:#ffd54a}.ar{align-self:center;opacity:.6}.bc p.out{margin:8px 0 0;padding:8px;border-radius:8px;background:#ffffff14;font-size:13px;line-height:1.5}.bc p.out.me{border:2px solid #ffd54a}.rk{border-collapse:collapse;width:100%;text-align:center}.rk th,.rk td{padding:8px 6px;border-bottom:1px solid #fff2;white-space:nowrap}.rk .tn{text-align:left;font-weight:700}.rk .lg{width:26px;height:26px}.day.asb{background:#3b82c426;border-color:#3b82c4}.day.rx{background:#ff9b9b26;border-color:#ff9b9b99}.rk tr.me td{border-top:2px solid #ffd54a;border-bottom:2px solid #ffd54a}.rk tr.me td:first-child{border-left:2px solid #ffd54a}.rk tr.me td:last-child{border-right:2px solid #ffd54a}
 .act.on{color:#fff;outline:3px solid #ffd54a;outline-offset:2px;text-shadow:0 1px 2px #000}
+.sp{font-weight:700;opacity:.85;display:inline-block;margin-top:2px}
 </style></head><body><div class="wrap">
 
 <div id="pick"><h1>응원하는 팀을 고르시오</h1><div class="teams" id="teams"></div></div>
@@ -110,11 +111,11 @@ const PSG=[
 ["2026-10-20","18:30","KIA","LG","잠실",null,null,null,"준PO",3,false],
 ["2026-10-21","18:30","KIA","LG","잠실",null,null,null,"준PO",4,true],
 ["2026-10-23","18:30","LG","KIA","광주",null,null,null,"준PO",5,true],
-["2026-10-25","14:00","KIA","삼성","대구",null,null,null,"PO",1,false],
-["2026-10-26","18:30","KIA","삼성","대구",null,null,null,"PO",2,false],
-["2026-10-28","18:30","삼성","KIA","광주",null,null,null,"PO",3,false],
-["2026-10-29","18:30","삼성","KIA","광주",null,null,null,"PO",4,true],
-["2026-10-31","14:00","KIA","삼성","대구",null,null,null,"PO",5,true],
+["2026-10-26","18:30","KIA","삼성","대구",null,null,null,"PO",1,false],
+["2026-10-27","18:30","KIA","삼성","대구",null,null,null,"PO",2,false],
+["2026-10-29","18:30","삼성","KIA","광주",null,null,null,"PO",3,false],
+["2026-10-30","18:30","삼성","KIA","광주",null,null,null,"PO",4,true],
+["2026-11-01","14:00","KIA","삼성","대구",null,null,null,"PO",5,true],
 ["2026-11-02","18:30","PO승자","KT","수원",null,null,null,"KS",1,false],
 ["2026-11-03","18:30","PO승자","KT","수원",null,null,null,"KS",2,false],
 ["2026-11-05","18:30","KT","PO승자","승자 홈",null,null,null,"KS",3,false],
@@ -130,11 +131,14 @@ const opp=g=>(g[2]===sel||inPh(g[2],sel))?g[3]:g[2];
 const park=g=>g[4]!=="승자 홈"?g[4]:(isHome(g)?PARK[sel]:(g[3]==="준PO승자"?"광주·잠실":"대구·광주·잠실"));
 const psTag=g=>g[8]?'<span class="ps">'+STG[g[8]]+' '+g[9]+'차전'+(g[10]?' (필요 시)':'')+'</span> ':'';
 const psNote=g=>{if(!g[8])return"";if(!(g[2]===sel||g[3]===sel||inPh(g[2],sel)||inPh(g[3],sel)))return"";let t=[];
- if(via(g))t.push('앞 시리즈를 이겨 올라가야 열리는 경기예요.');
- if(g[10]&&!via(g))t.push('시리즈가 먼저 끝나면 열리지 않는 경기예요.');
- if(g[4]==="승자 홈"&&!isHome(g))t.push('구장은 상대 시리즈 승자의 홈구장이라 결과가 나온 뒤 정해져요.');
+ if(via(g))t.push('앞 시리즈를 이겨 올라가야 열리는 경기입니다.');
+ if(g[10]&&!via(g))t.push('시리즈가 먼저 끝나면 열리지 않는 경기입니다.');
+ if(g[4]==="승자 홈"&&!isHome(g))t.push('구장은 상대 시리즈 승자의 홈구장이라 결과가 나온 뒤 정해집니다.');
  return t.length?'<p class="note">'+t.join(' ')+'</p>':""};
 const PSINFO={KT:"정규시즌 1위 · 한국시리즈 직행",삼성:"정규시즌 2위 · 플레이오프 직행",KIA:"정규시즌 3위 · 준플레이오프에서 LG를 3승 0패로 꺾고 플레이오프 진출 → 삼성과 대결",LG:"정규시즌 4위 · 와일드카드 결정전 승리(4:1) → 준플레이오프에서 KIA에 0승 3패로 탈락",두산:"정규시즌 5위 · 와일드카드 결정전에서 LG에 져 탈락"};
+// 포스트시즌 선발투수: "날짜|원정|홈" -> [원정 선발, 홈 선발, 비고]
+const PSP={"2026-10-14|두산|LG":["곽빈","카라스코"],"2026-10-17|LG|KIA":["톨허스트","네일"],"2026-10-18|LG|KIA":["임찬규","올러"],"2026-10-20|KIA|LG":["시라카와","카라스코"],"2026-10-26|KIA|삼성":["네일","페덱"],"2026-10-27|KIA|삼성":["올러","후라도"],"2026-10-29|삼성|KIA":["최원태","시라카와"],"2026-10-30|삼성|KIA":["페덱","네일"]};
+const spTxt=g=>{const k=g[0]+"|"+g[2]+"|"+g[3];if(RN[k]||RX[k])return"";const p=PSP[k];if(!p)return"선발 미정";return"선발 "+g[2]+" "+p[0]+" · "+g[3]+" "+p[1]+(p[2]?" ("+p[2]+")":"")};
 const NEED={WC:1,"준PO":3,PO:3,KS:4};
 function seriesHtml(){let h='<div class="ser">';
  ["WC","준PO","PO","KS"].forEach(st=>{const gs=PSG.filter(g=>g[8]===st),ts=[];
@@ -383,6 +387,9 @@ R["2026-10-17|LG|KIA"]=[1,5];
 R["2026-10-18|LG|KIA"]=[3,6];
 // 준플레이오프 3차전: 10/20 잠실 KIA 13:1 LG (KIA 3승 0패로 시리즈 종료, 플레이오프 진출)
 R["2026-10-20|KIA|LG"]=[13,1];
+R["2026-10-26|KIA|삼성"]=[5,1];
+R["2026-10-27|KIA|삼성"]=[3,8];
+R["2026-10-29|삼성|KIA"]=[6,4];
 RN["2026-10-21|KIA|LG"]="취소(시리즈 종료): KIA가 3승을 먼저 올려 열리지 않았습니다.";RN["2026-10-23|LG|KIA"]="취소(시리즈 종료): KIA가 3승을 먼저 올려 열리지 않았습니다.";
 // 10/20 잠실 준PO 3차전 KIA 13:1 LG → KIA 3승 0패로 플레이오프 진출 (4·5차전 미개최)
 R["2026-10-20|KIA|LG"]=[13,1];RN["2026-10-21|KIA|LG"]="취소(시리즈 종료): KIA가 3승을 먼저 거둬 열리지 않았습니다.";RN["2026-10-23|LG|KIA"]="취소(시리즈 종료): KIA가 3승을 먼저 거둬 열리지 않았습니다.";
@@ -409,6 +416,8 @@ const ASB={"2026-07-10":["올스타 프라이데이<br>퓨처스 올스타전 18
 "2026-07-14":["올스타 브레이크<br>경기 없음","올스타 브레이크","올스타전 이후 휴식 기간으로 정규시즌 경기가 없습니다. 정규시즌은 7월 16일에 재개됩니다."],
 "2026-07-15":["올스타 브레이크<br>경기 없음","올스타 브레이크","올스타전 이후 휴식 기간으로 정규시즌 경기가 없습니다. 정규시즌은 7월 16일에 재개됩니다."]};
 PSG.forEach(g=>G.push(g));
+G.push(["2026-10-25","14:00","KIA","삼성","대구",null,null,null,"PO",1,false]);RX["2026-10-25|KIA|삼성"]=1;
+const PPN={"2026-10-26|KIA|삼성":"10/25 우천 취소로 순연"};
 G.sort((a,b)=>{const x=a[0]+a[1],y=b[0]+b[1];return x<y?-1:x>y?1:0});
 let sp="reg";
 const stabs=()=>"";
@@ -446,7 +455,7 @@ function detail(k){const n=kst(),el=$("detail");el.style.display="block";setTime
   else if(RX[key])res='<p style="font-size:18px;font-weight:800;margin:6px 0">우천 취소</p><p>비로 열리지 못한 경기입니다.</p>';
   else if(past)res='<p>'+(RN[key]&&RN[key][0]==='취'?RN[key]:(g[10]?'필요 시 편성된 경기로, 열리지 않았거나 ':'경기는 끝났지만 ')+(RN[key]||'결과를 확인하지 못했습니다.'))+'</p>'+((RN[key]&&RN[key][0]==='취')?'':'<p>직접 입력: '+nm(a)+' <input id="ia" type="number" min="0" style="width:52px"> : <input id="ih" type="number" min="0" style="width:52px"> '+nm(h)+' <button class="mt" id="isv" data-k="'+key+'">기록</button></p>');
   else res='<p>경기 예정 · '+t+' 시작'+(amb?' (홈/원정 미확인)':'')+'</p>';
-  return '<div style="margin-bottom:10px"><h3 style="margin:0 0 6px">'+psTag(g)+md(d)+' '+nm(a)+(amb?' vs ':' @ ')+nm(h)+' · '+park(g)+'</h3>'+psNote(g)+res+(RX[key]?'':'<p>라인업: '+(past?'':'경기 약 1시간 전 공개 · ')+nvBtn(g)+'</p>')+'</div>'}).join("")+LINKS}
+  return '<div style="margin-bottom:10px"><h3 style="margin:0 0 6px">'+psTag(g)+md(d)+' '+nm(a)+(amb?' vs ':' @ ')+nm(h)+' · '+park(g)+'</h3>'+psNote(g)+(PPN[key]?'<p class="note">'+PPN[key]+'되었습니다.</p>':'')+res+(g[8]&&spTxt(g)?'<p><b>'+spTxt(g)+'</b></p>':'')+(RX[key]?'':'<p>라인업: '+(past?'':'경기 약 1시간 전 공개 · ')+nvBtn(g)+'</p>')+'</div>'}).join("")+LINKS}
 function kst(){const o={};new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date()).forEach(x=>o[x.type]=x.value);return{d:o.year+"-"+o.month+"-"+o.day,m:(+o.hour%24)*60+(+o.minute)}}
 const mins=t=>+t.slice(0,2)*60+(+t.slice(3)),md=s=>(+s.slice(5,7))+"/"+(+s.slice(8));
 function serData(st){const gs=PSG.filter(g=>g[8]===st),ts=[];
@@ -466,7 +475,7 @@ function bracket(){
   let teams=d.ts.map(tr).join('');
   if(st==="준PO"||st==="PO"||st==="KS"){const src=sd[nxt[st]];if(src&&src.win&&!d.ts.includes(src.win))teams+=tr(src.win).replace('<span>'+(d.w[src.win]||0)+'승</span>','<span>'+(d.w[src.win]||0)+'승</span>');else if(!(src&&src.win))teams+='<div class="bt dim"><b>'+STG[nxt[st]]+' 승자</b><span>대기</span></div>'}
   const rn=g=>{const r=res(g);let a=g[2],h=g[3];[0,1].forEach(()=>{});if(isPH(a)){const w=sd[nxt[st]]&&sd[nxt[st]].win;a=w||STG[nxt[st]]+' 승자'}if(isPH(h)){const w=sd[nxt[st]]&&sd[nxt[st]].win;h=w||STG[nxt[st]]+' 승자'}
-   return '<li><button class="pg" data-k="'+g[0]+'" data-key="'+g[0]+'|'+g[2]+'|'+g[3]+'"><i>'+g[9]+'차전'+(g[10]?'*':'')+'</i>'+(RN[g[0]+"|"+g[2]+"|"+g[3]]?' <b>미개최</b>':'')+' '+md(g[0])+' '+g[1]+' · '+(g[4]==="승자 홈"?'승자 홈':g[4])+'<br>'+nm(a)+(r?' <b>'+r[0]+' : '+r[1]+'</b> ':' vs ')+nm(h)+'<u>상세 보기</u></button></li>'};
+   return '<li><button class="pg" data-k="'+g[0]+'" data-key="'+g[0]+'|'+g[2]+'|'+g[3]+'"><i>'+g[9]+'차전'+(g[10]?'*':'')+'</i>'+(RN[g[0]+"|"+g[2]+"|"+g[3]]?' <b>미개최</b>':'')+' '+md(g[0])+' '+g[1]+' · '+(g[4]==="승자 홈"?'승자 홈':g[4])+'<br>'+nm(a)+(r?' <b>'+r[0]+' : '+r[1]+'</b> ':' vs ')+nm(h)+(PPN[g[0]+"|"+g[2]+"|"+g[3]]?'<br><small class="sp">'+PPN[g[0]+"|"+g[2]+"|"+g[3]]+'</small>':'')+(spTxt(g)?'<br><small class="sp">'+spTxt(g)+'</small>':'')+'<u>상세 보기</u></button></li>'};
   const parts=d.ts.slice();if(nxt[st]){const src=sd[nxt[st]];if(src&&src.win&&!parts.includes(src.win))parts.push(src.win)}
   let out="";if(d.win){const lo=parts.find(t=>t!==d.win),NS={WC:"준플레이오프",준PO:"플레이오프",PO:"한국시리즈"},RK={WC:"5위",준PO:"4위",PO:"3위"},cl=t=>' class="out'+(t===sel?' me':'')+'"';
    if(st==="KS"){if(lo===sel)out='<p'+cl(lo)+'><b>'+nm(lo)+'</b> KBO 준우승을 하였습니다.</p>';else if(d.win===sel)out='<p'+cl(d.win)+'><b>'+nm(d.win)+'</b> KBO 우승을 하였습니다.</p>'}
@@ -481,7 +490,7 @@ function rank(){
  $("view").innerHTML='<div class="panel"><h2>2026 KBO 정규시즌 순위표</h2><div class="scroll"><table class="rk"><tr><th>순위</th><th>팀</th><th>승률</th><th>게임차</th><th>승</th><th>패</th><th>무</th></tr>'+rows.map(tr).join('')+'</table></div><p class="note">정규시즌 144경기 종료 기준. 승률은 승÷(승+패), 게임차는 1위 기준입니다. 내가 고른 팀은 노란 테두리로 강조했습니다.</p></div>'}
 function today(){const n=kst(),a=mine();return{n,g:a.find(x=>x[0]===n.d),next:a.find(x=>x[0]>n.d)}}
 const nextTxt=x=>x?'<p class="note">다음 확인된 경기: '+md(x[0])+' '+x[1]+' '+(x[8]?'['+STG[x[8]]+' '+x[9]+'차전] ':'')+'vs '+opp(x)+' ('+park(x)+')</p>':'';
-const CAV='<p class="note">확인된 일정 기준입니다. 아직 확인하지 못한 날짜에는 경기가 있을 수 있어요.</p>';
+const CAV='<p class="note">확인된 일정 기준입니다. 아직 확인하지 못한 날짜에는 경기가 있을 수 있습니다.</p>';
 // ── 경기 결과 자동 기록 ──
 // 서버가 status:"end" 와 최종 점수를 보내면 그 경기를 브라우저(localStorage)에 저장하고 일정·시즌 기록에 바로 반영합니다.
 const SK="kbo-results-v1";
@@ -526,6 +535,7 @@ function live(auto){
 function line(){
  const {n,g,next}=today();
  if(!g){$("view").innerHTML='<div class="panel"><h2>라인업 확인하기</h2><p style="font-size:18px;font-weight:800">오늘('+md(n.d)+')은 경기가 없는 날입니다.</p>'+nextTxt(next)+CAV+LINKS+'</div>';return}
+ if(RX[g[0]+"|"+g[2]+"|"+g[3]]){$("view").innerHTML='<div class="panel"><h2>라인업 확인하기</h2><p style="font-size:18px;font-weight:800">오늘('+md(n.d)+') '+nm(g[2])+' vs '+nm(g[3])+(g[8]?' '+STG[g[8]]+' '+g[9]+'차전':'')+' 경기는 우천 취소되었습니다.</p>'+(g[8]&&g[9]===1?'<p>순연된 경기는 내일(10/26) 18:30에 열립니다.</p>':'')+nextTxt(next)+LINKS+'</div>';return}
  const open=n.m>=mins(g[1])-60;
  const col=(k,p)=>'<div><h3 style="margin:0 0 6px;padding:6px 10px;border-radius:8px;background:'+tc(k)+'">'+nm(k)+'</h3><p>'+(open?'':'라인업이 아직 안 나왔습니다. ')+nvBtn(g)+'</p></div>';
  $("view").innerHTML='<div class="panel"><h2>라인업 · '+md(g[0])+' '+g[1]+'</h2><p style="font-size:18px;font-weight:800;margin:0 0 10px">오늘 경기 상대: '+nm(opp(g))+(g[8]?' · '+STG[g[8]]+' '+g[9]+'차전':'')+'</p><div class="lgrid">'+col(g[2],g[5])+col(g[3],g[6])+'</div><p class="note">라인업은 보통 경기 시작 약 1시간 전에 공개됩니다.</p>'+LINKS+'</div>'}
